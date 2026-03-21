@@ -193,3 +193,12 @@
 .negative {
   color: var(--color-red);
 }
+
+.dashboard-footer {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.dashboard-footer button {
+  padding: 8px 24px;
+}

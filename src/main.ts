@@ -35,7 +35,7 @@ export default class LedgerLightPlugin extends Plugin {
       name: 'Open Dashboard',
       callback: () => this.openDashboard()
     });
-    this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this.app, this.settings.currency));
+    this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this.app, this, this.settings.currency));
   }
 
   async loadSettings() {

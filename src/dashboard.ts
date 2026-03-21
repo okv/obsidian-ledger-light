@@ -8,6 +8,10 @@ import {
 } from './parser';
 import { readJournalFile } from './utils';
 
+interface LedgerLightPlugin {
+  openAddTransactionModal(): void;
+}
+
 export const LEDGER_DASHBOARD_VIEW = 'ledger-dashboard';
 
 interface AccountSummary {
@@ -28,7 +32,7 @@ export class LedgerDashboardView extends ItemView {
   private selectedAccount: string = 'all';
   private accounts: string[] = [];
 
-  constructor(leaf: WorkspaceLeaf, private app: App, private currency: string) {
+  constructor(leaf: WorkspaceLeaf, private app: App, private plugin: LedgerLightPlugin, private currency: string) {
     super(leaf);
     const now = new Date();
     this.currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -108,17 +112,23 @@ export class LedgerDashboardView extends ItemView {
 
     if (monthData.totalIncome === 0 && monthData.totalExpenses === 0) {
       content.createEl('p', { text: 'No transactions this month' });
-      return;
+    } else {
+      this.renderSection(content, 'INCOME', monthData.income, monthData.totalIncome, false);
+      this.renderSection(content, 'EXPENSES', monthData.expenses, monthData.totalExpenses, true);
+      
+      const net = monthData.totalIncome - Math.abs(monthData.totalExpenses);
+      const netDiv = content.createDiv('net-section');
+      netDiv.createEl('span', { text: 'NET' });
+      const netValue = netDiv.createEl('span', { text: this.formatAmount(net) });
+      netValue.addClass(net >= 0 ? 'positive' : 'negative');
     }
 
-    this.renderSection(content, 'INCOME', monthData.income, monthData.totalIncome, false);
-    this.renderSection(content, 'EXPENSES', monthData.expenses, monthData.totalExpenses, true);
-    
-    const net = monthData.totalIncome - Math.abs(monthData.totalExpenses);
-    const netDiv = content.createDiv('net-section');
-    netDiv.createEl('span', { text: 'NET' });
-    const netValue = netDiv.createEl('span', { text: this.formatAmount(net) });
-    netValue.addClass(net >= 0 ? 'positive' : 'negative');
+    const buttonDiv = content.createDiv('dashboard-footer');
+    const addBtn = buttonDiv.createEl('button', { text: 'Add Transaction' });
+    addBtn.addClass('mod-cta');
+    addBtn.addEventListener('click', () => {
+      this.plugin.openAddTransactionModal();
+    });
   }
 
   private renderSection(
