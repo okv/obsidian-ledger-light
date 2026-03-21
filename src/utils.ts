@@ -43,11 +43,9 @@ export async function ensureJournalFile(app: App, path: string): Promise<void> {
 export function formatTransaction(entry: TransactionEntry): string {
   const date = formatDate(entry.date);
   const desc = entry.description || 'Transaction';
-  const from = entry.fromAccount;
-  const to = entry.toAccount;
   const amount = formatAmount(Math.abs(entry.amount), entry.currency);
 
-  return `${date} ${desc}\n    ${from}    ${amount}\n    ${to}    -${amount}`;
+  return `${date} ${desc}\n    ${entry.toAccount}    ${amount}\n    ${entry.fromAccount}`;
 }
 
 function formatDate(dateStr: string): string {

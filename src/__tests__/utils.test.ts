@@ -6,22 +6,22 @@ describe('formatTransaction', () => {
     const entry = {
       date: '2024-01-15',
       description: 'Groceries',
-      fromAccount: 'expenses:food',
-      toAccount: 'assets:cash',
+      fromAccount: 'assets:cash',
+      toAccount: 'expenses:food',
       amount: 25.50,
-      currency: '$',
+      currency: '€',
     };
 
     const result = formatTransaction(entry);
-    expect(result).toBe('2024/01/15 Groceries\n    expenses:food    $25.50\n    assets:cash    -$25.50');
+    expect(result).toBe('2024/01/15 Groceries\n    expenses:food    €25.50\n    assets:cash');
   });
 
   it('handles empty description', () => {
     const entry = {
       date: '2024-01-15',
       description: '',
-      fromAccount: 'expenses:food',
-      toAccount: 'assets:cash',
+      fromAccount: 'assets:cash',
+      toAccount: 'expenses:food',
       amount: 10,
       currency: '€',
     };
@@ -38,12 +38,11 @@ describe('formatTransaction', () => {
       fromAccount: 'from',
       toAccount: 'to',
       amount: -50,
-      currency: '$',
+      currency: '€',
     };
 
     const result = formatTransaction(entry);
-    expect(result).toContain('$50.00');
-    expect(result).toContain('-$50.00');
+    expect(result).toContain('€50.00');
   });
 
   it('formats amount with 2 decimal places', () => {
@@ -53,10 +52,10 @@ describe('formatTransaction', () => {
       fromAccount: 'from',
       toAccount: 'to',
       amount: 10,
-      currency: '$',
+      currency: '€',
     };
 
     const result = formatTransaction(entry);
-    expect(result).toContain('$10.00');
+    expect(result).toContain('€10.00');
   });
 });
