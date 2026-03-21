@@ -15,7 +15,7 @@ interface LedgerSettings {
 
 const DEFAULT_SETTINGS: LedgerSettings = {
   journalPath: 'transactions.ledger',
-  currency: '$'
+  currency: '€'
 };
 
 export default class LedgerLightPlugin extends Plugin {
@@ -74,11 +74,11 @@ class LedgerSettingsTab extends PluginSettingTab {
       .setDesc('Symbol to use for amounts (e.g., $, €, £)')
       .addText(text =>
         text
-          .setPlaceholder('$')
+          .setPlaceholder('€')
           .setValue(this.plugin.settings.currency)
           .onChange(async value => {
-            this.plugin.settings.currency = value || '$';
-            await this.plugin.saveSettings();
+            this.plugin.settings.currency = value || '€';
+            this.plugin.saveSettings();
           })
       );
   }
