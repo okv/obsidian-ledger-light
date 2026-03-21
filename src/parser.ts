@@ -14,6 +14,11 @@ export interface ParsedTransaction {
   postings: Posting[];
 }
 
+export interface ParsedTransactionWithLines extends ParsedTransaction {
+  startLine: number;
+  endLine: number;
+}
+
 const ACCOUNT_WITH_AMOUNT_REGEX = /^\s+([\w:][\w:\-]*)\s+([-+]?[€$£¥]?[\d,]+\.?\d*)/;
 const ACCOUNT_NO_AMOUNT_REGEX = /^\s+([\w:][\w:\-]*)\s*$/;
 const ALIAS_REGEX = /^alias\s+(\S+)\s*=\s*(.+)$/;
@@ -92,6 +97,62 @@ export function parseTransactions(content: string): ParsedTransaction[] {
         }
         
         currentTransaction.postings.push({ account, amount });
+      }
+    }
+  }
+
+  if (currentTransaction) {
+    transactions.push(currentTransaction);
+  }
+
+  return transactions;
+}
+
+export function parseTransactionsWithLines(content: string): ParsedTransactionWithLines[] {
+  const transactions: ParsedTransactionWithLines[] = [];
+  const lines = content.split('\n');
+  let currentTransaction: ParsedTransactionWithLines | null = null;
+  let startLine = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmedLine = line.trim();
+    
+    if (!trimmedLine || trimmedLine.startsWith(';') || trimmedLine.startsWith('!') || trimmedLine.startsWith('#')) {
+      continue;
+    }
+
+    const transactionMatch = trimmedLine.match(TRANSACTION_LINE_REGEX);
+    if (transactionMatch) {
+      if (currentTransaction) {
+        currentTransaction.endLine = i - 1;
+        transactions.push(currentTransaction);
+      }
+      const dateStr = transactionMatch[1].replace(/\//g, '-');
+      startLine = i;
+      currentTransaction = {
+        date: dateStr,
+        description: transactionMatch[2].trim(),
+        postings: [],
+        startLine: i,
+        endLine: i
+      };
+      continue;
+    }
+
+    if (currentTransaction) {
+      const postingMatch = line.match(ACCOUNT_WITH_AMOUNT_REGEX) || line.match(ACCOUNT_NO_AMOUNT_REGEX);
+      if (postingMatch && postingMatch[1]) {
+        const account = postingMatch[1].trim();
+        let amount = 0;
+        
+        if (postingMatch[2]) {
+          const amountStr = postingMatch[2].replace(/[,$€£¥]/g, '').trim();
+          amount = parseFloat(amountStr) || 0;
+        }
+        
+        currentTransaction.postings.push({ account, amount });
+        currentTransaction.endLine = i;
       }
     }
   }

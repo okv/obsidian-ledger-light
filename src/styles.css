@@ -201,4 +201,91 @@
 
 .dashboard-footer button {
   padding: 8px 24px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+}
+
+.dashboard-footer button:hover {
+  background: var(--background-modifier-hover);
+}
+
+.ledger-transactions {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.transactions-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.transactions-header button {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+}
+
+.transactions-header button:hover {
+  background: var(--background-modifier-hover);
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--background-secondary);
+  border-radius: 4px;
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.transaction-info span:first-child {
+  font-size: 14px;
+}
+
+.transaction-info span:last-child {
+  font-family: var(--font-monospace);
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.transaction-item button {
+  padding: 4px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.transaction-item button:hover {
+  color: var(--color-red);
 }

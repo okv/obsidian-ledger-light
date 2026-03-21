@@ -10,6 +10,7 @@ import { readJournalFile } from './utils';
 
 interface LedgerLightPlugin {
   openAddTransactionModal(): void;
+  openTransactionsView(): void;
 }
 
 export const LEDGER_DASHBOARD_VIEW = 'ledger-dashboard';
@@ -125,9 +126,12 @@ export class LedgerDashboardView extends ItemView {
 
     const buttonDiv = content.createDiv('dashboard-footer');
     const addBtn = buttonDiv.createEl('button', { text: 'Add Transaction' });
-    addBtn.addClass('mod-cta');
     addBtn.addEventListener('click', () => {
       this.plugin.openAddTransactionModal();
+    });
+    const recentBtn = buttonDiv.createEl('button', { text: 'Recent Transactions' });
+    recentBtn.addEventListener('click', () => {
+      this.plugin.openTransactionsView();
     });
   }
 

@@ -59,3 +59,24 @@ function formatDate(dateStr: string): string {
 function formatAmount(amount: number, currency: string): string {
   return `${currency}${amount.toFixed(2)}`;
 }
+
+export async function deleteTransaction(
+  app: App,
+  path: string,
+  startLine: number,
+  endLine: number
+): Promise<void> {
+  const file = app.vault.getAbstractFileByPath(path);
+  if (file instanceof TFile) {
+    const content = await app.vault.read(file);
+    const lines = content.split('\n');
+    
+    for (let i = startLine; i <= endLine && i < lines.length; i++) {
+      if (!lines[i].trim().startsWith(';')) {
+        lines[i] = '; ' + lines[i];
+      }
+    }
+    
+    await app.vault.modify(file, lines.join('\n'));
+  }
+}

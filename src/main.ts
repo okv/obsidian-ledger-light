@@ -8,6 +8,7 @@ import {
   TransactionEntry
 } from './utils';
 import { LedgerDashboardView, LEDGER_DASHBOARD_VIEW } from './dashboard';
+import { LedgerTransactionsView, LEDGER_TRANSACTIONS_VIEW } from './transactions';
 
 interface LedgerSettings {
   journalPath: string;
@@ -35,7 +36,13 @@ export default class LedgerLightPlugin extends Plugin {
       name: 'Open Dashboard',
       callback: () => this.openDashboard()
     });
+    this.addCommand({
+      id: 'open-transactions',
+      name: 'Recent Transactions',
+      callback: () => this.openTransactionsView()
+    });
     this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this.app, this, this.settings.currency));
+    this.registerView(LEDGER_TRANSACTIONS_VIEW, (leaf) => new LedgerTransactionsView(leaf, this.app, this));
   }
 
   async loadSettings() {
@@ -59,6 +66,15 @@ export default class LedgerLightPlugin extends Plugin {
       leaf = workspace.getLeaf(true);
     }
     await leaf.setViewState({ type: LEDGER_DASHBOARD_VIEW });
+  }
+
+  async openTransactionsView() {
+    const { workspace } = this.app;
+    let leaf: WorkspaceLeaf = workspace.getLeaf('tab');
+    if (!leaf) {
+      leaf = workspace.getLeaf(true);
+    }
+    await leaf.setViewState({ type: LEDGER_TRANSACTIONS_VIEW });
   }
 }
 
