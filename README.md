@@ -1,6 +1,8 @@
 # Ledger Light
 
 > ⚠️ **Work in Progress** - This plugin is under active development.
+>
+> Built with [opencode](https://opencode.ai) for exploration purposes.
 
 Simple hledger integration for Obsidian. Add transactions and view your finances with minimal setup.
 
