@@ -1,6 +1,6 @@
 {
   "name": "obsidian-ledger-light",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Simple hledger integration for Obsidian",
   "main": "main.js",
   "scripts": {
