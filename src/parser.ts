@@ -3,7 +3,7 @@ export interface AccountInfo {
   aliases: Map<string, string>;
 }
 
-const ACCOUNT_LINE_REGEX = /^\s+([\w:][\w:\-\s]+?)\s+[-$€£¥]?\s*[\d,]+\.?\d*/;
+const ACCOUNT_LINE_REGEX = /^\s+([\w:][\w:\-]+)\s*([-+]?[$€£¥]?\s*[\d,]+\.?\d*)?/;
 const ALIAS_REGEX = /^alias\s+(\S+)\s*=\s*(.+)$/;
 
 export function parseJournalFile(content: string): AccountInfo {

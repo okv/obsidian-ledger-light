@@ -10,8 +10,11 @@ dist/
 styles.css
 
 # Source files
-src/
-*.ts
+src/*.ts
+src/__tests__/
+!src/__tests__/
+*.test.ts
+vitest.config.ts
 tsconfig.json
 
 # IDE
