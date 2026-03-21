@@ -1,4 +1,4 @@
-import { App, Modal, Plugin, PluginSettingTab, Setting, setIcon } from 'obsidian';
+import { App, Modal, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from 'obsidian';
 import { parseJournalFile } from './parser';
 import {
   readJournalFile,
@@ -7,6 +7,7 @@ import {
   formatTransaction,
   TransactionEntry
 } from './utils';
+import { LedgerDashboardView, LEDGER_DASHBOARD_VIEW } from './dashboard';
 
 interface LedgerSettings {
   journalPath: string;
@@ -29,6 +30,12 @@ export default class LedgerLightPlugin extends Plugin {
       name: 'Add Transaction',
       callback: () => this.openAddTransactionModal()
     });
+    this.addCommand({
+      id: 'open-dashboard',
+      name: 'Open Dashboard',
+      callback: () => this.openDashboard()
+    });
+    this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this.app, this.settings.currency));
   }
 
   async loadSettings() {
@@ -43,6 +50,15 @@ export default class LedgerLightPlugin extends Plugin {
     const content = await readJournalFile(this.app, this.settings.journalPath);
     const { accounts } = parseJournalFile(content);
     new AddTransactionModal(this.app, this, accounts).open();
+  }
+
+  async openDashboard() {
+    const { workspace } = this.app;
+    let leaf: WorkspaceLeaf = workspace.getLeaf('tab');
+    if (!leaf) {
+      leaf = workspace.getLeaf(true);
+    }
+    await leaf.setViewState({ type: LEDGER_DASHBOARD_VIEW });
   }
 }
 

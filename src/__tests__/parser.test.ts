@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseJournalFile } from '../parser';
+import { parseJournalFile, parseTransactions, isIncomeAccount, isExpenseAccount } from '../parser';
 
 describe('parseJournalFile', () => {
   it('extracts accounts from posting lines', () => {
@@ -64,5 +64,109 @@ alias f=expenses:food
 `;
     const result = parseJournalFile(content);
     expect(result.accounts.length).toBe(5);
+  });
+});
+
+describe('isIncomeAccount', () => {
+  it('returns true for accounts starting with income:', () => {
+    expect(isIncomeAccount('income:salary')).toBe(true);
+    expect(isIncomeAccount('Income:Salary')).toBe(true);
+  });
+
+  it('returns false for other accounts', () => {
+    expect(isIncomeAccount('expenses:food')).toBe(false);
+    expect(isIncomeAccount('assets:cash')).toBe(false);
+  });
+});
+
+describe('isExpenseAccount', () => {
+  it('returns true for accounts starting with expenses:', () => {
+    expect(isExpenseAccount('expenses:food')).toBe(true);
+    expect(isExpenseAccount('Expenses:Groceries')).toBe(true);
+  });
+
+  it('returns false for other accounts', () => {
+    expect(isExpenseAccount('income:salary')).toBe(false);
+    expect(isExpenseAccount('assets:cash')).toBe(false);
+  });
+});
+
+describe('parseTransactions', () => {
+  it('parses a simple transaction', () => {
+    const content = `
+2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash
+`;
+    const result = parseTransactions(content);
+    expect(result.length).toBe(1);
+    expect(result[0].date).toBe('2024-01-15');
+    expect(result[0].description).toBe('Groceries');
+    expect(result[0].postings.length).toBe(2);
+  });
+
+  it('extracts amounts from postings', () => {
+    const content = `
+2024/01/15 Salary
+    assets:bank         €3000
+    income:salary
+`;
+    const result = parseTransactions(content);
+    expect(result[0].postings[0].account).toBe('assets:bank');
+    expect(result[0].postings[0].amount).toBe(3000);
+    expect(result[0].postings[1].account).toBe('income:salary');
+    expect(result[0].postings[1].amount).toBe(0);
+  });
+
+  it('handles multiple transactions', () => {
+    const content = `
+2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash
+
+2024/01/20 Salary
+    assets:bank         €3000
+    income:salary
+`;
+    const result = parseTransactions(content);
+    expect(result.length).toBe(2);
+    expect(result[0].description).toBe('Groceries');
+    expect(result[1].description).toBe('Salary');
+  });
+
+  it('ignores comment lines', () => {
+    const content = `
+; comment line
+2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash
+`;
+    const result = parseTransactions(content);
+    expect(result.length).toBe(1);
+  });
+
+  it('handles empty content', () => {
+    const result = parseTransactions('');
+    expect(result.length).toBe(0);
+  });
+
+  it('parses dates with slashes', () => {
+    const content = `
+2024/01/15 Test
+    expenses:test        €10
+    assets:cash
+`;
+    const result = parseTransactions(content);
+    expect(result[0].date).toBe('2024-01-15');
+  });
+
+  it('handles negative amounts', () => {
+    const content = `
+2024/01/15 Refund
+    assets:cash         -€25.50
+    expenses:food
+`;
+    const result = parseTransactions(content);
+    expect(result[0].postings[0].amount).toBe(-25.50);
   });
 });

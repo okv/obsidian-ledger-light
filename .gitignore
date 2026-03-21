@@ -11,6 +11,7 @@ styles.css
 
 # Source files
 src/*.ts
+!src/dashboard.ts
 !src/__tests__/
 !vitest.config.ts
 vitest.config.mts
