@@ -138,10 +138,14 @@ class AddTransactionModal extends Modal {
     const fromRow = form.createDiv('form-row');
     fromRow.createEl('label', { text: 'From Account' });
     const fromSelect = this.createAccountSelect(fromRow);
+    const defaultFrom = this.accounts.find(a => a.startsWith('assets:')) || this.accounts[0];
+    fromSelect.value = defaultFrom;
 
     const toRow = form.createDiv('form-row');
     toRow.createEl('label', { text: 'To Account' });
     const toSelect = this.createAccountSelect(toRow);
+    const defaultTo = this.accounts.find(a => a !== defaultFrom) || this.accounts[1] || '';
+    if (defaultTo) toSelect.value = defaultTo;
 
     const buttonRow = form.createDiv('form-row');
     const submitBtn = buttonRow.createEl('button', {
