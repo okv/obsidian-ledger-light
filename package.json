@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "npm run build -- --watch",
-    "build": "tsc -p tsconfig.json && cp src/styles.css dist/"
+    "build": "tsc -p tsconfig.json && cp src/styles.css dist/ && cp manifest.json versions.json dist/"
   },
   "dependencies": {
     "obsidian": "^0.15.0"
