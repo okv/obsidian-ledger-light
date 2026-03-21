@@ -11,7 +11,7 @@ Simple hledger integration for Obsidian. Add transactions and view your finances
 - **Quick Transaction Entry** - Add expenses/income via a simple form with account dropdowns
 - **Auto-populated Accounts** - Account list is automatically read from your hledger journal file
 - **Balanced Entries** - Transactions are automatically balanced per double-entry bookkeeping
-- **Dashboard** (coming soon) - Monthly income/expense summary with account filtering
+- **Dashboard** - Monthly income/expense summary with account filtering
 
 ## Installation
 
@@ -51,7 +51,7 @@ Accounts are automatically discovered by scanning your journal file for existing
 In Obsidian Settings → Ledger Light:
 
 - **Journal file path**: Path to your hledger journal file (default: `transactions.ledger`)
-- **Currency symbol**: Symbol to prefix amounts (default: `$`)
+- **Currency symbol**: Symbol to prefix amounts (default: `€`)
 
 ## Journal File Format
 
@@ -80,14 +80,40 @@ This plugin uses standard hledger/journal format. Accounts like `assets:cash`, `
 # Install dependencies
 npm install
 
-# Build (outputs to dist/)
+# Build
 npm run build
 
-# Watch mode
-npm run dev
+# Run tests
+npm test
 ```
 
-Built files go to `dist/`. The plugin entry point is `dist/main.js`.
+Built files go to root directory. The plugin entry point is `main.js`.
+
+### Version Bumping
+
+```bash
+# Bump patch version (e.g., 0.3.0 → 0.3.1)
+npm run bump
+
+# Bump to specific version
+npm run bump -- 0.4.0
+
+# Bump version, commit, and create git tag
+npm run bump -- --commit
+```
+
+After running `npm run bump -- --commit`, push with:
+```bash
+git push && git push --tags
+```
+
+GitHub Actions will automatically create the release.
+
+### Release Process
+
+1. Run `npm run bump -- --commit`
+2. Push: `git push && git push --tags`
+3. GitHub Actions creates the release automatically
 
 ## Acknowledgments
 
