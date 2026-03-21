@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node esbuild.config.mjs && cp src/styles.css .",
     "test": "vitest run --reporter tree",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "bump": "node version-bump.mjs"
   },
   "dependencies": {
     "obsidian": "^0.15.0"
