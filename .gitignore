@@ -11,10 +11,9 @@ styles.css
 
 # Source files
 src/*.ts
-src/__tests__/
 !src/__tests__/
-*.test.ts
-vitest.config.ts
+!vitest.config.ts
+vitest.config.mts
 tsconfig.json
 
 # IDE
