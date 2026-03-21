@@ -28,8 +28,8 @@ export async function appendTransaction(
   const file = app.vault.getAbstractFileByPath(path);
   if (file instanceof TFile) {
     const existing = await app.vault.read(file);
-    const separator = existing.endsWith('\n') || existing.length === 0 ? '' : '\n';
-    await app.vault.modify(file, existing + separator + entry);
+    const separator = existing.length === 0 ? '' : '\n';
+    await app.vault.modify(file, existing + separator + entry + '\n');
   }
 }
 
