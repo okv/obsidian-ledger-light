@@ -1,11 +1,11 @@
 {
   "name": "obsidian-ledger-light",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simple hledger integration for Obsidian",
   "main": "main.js",
   "scripts": {
     "dev": "npm run build -- --watch",
-    "build": "tsc -p tsconfig.json && cp src/styles.css dist/ && cp manifest.json versions.json dist/"
+    "build": "tsc -p tsconfig.json && cp src/styles.css ."
   },
   "dependencies": {
     "obsidian": "^0.15.0"
