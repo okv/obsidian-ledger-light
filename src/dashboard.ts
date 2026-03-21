@@ -47,6 +47,10 @@ export class LedgerDashboardView extends ItemView {
     this.render();
   }
 
+  public refresh(): void {
+    this.loadData().then(() => this.render());
+  }
+
   private async loadData(): Promise<void> {
     try {
       const settings = this.app.plugins.getPlugin('ledger-light');

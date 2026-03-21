@@ -179,6 +179,12 @@ class AddTransactionModal extends Modal {
         formatTransaction(entry)
       );
 
+      const dashboardLeaves = this.app.workspace.getLeavesOfType(LEDGER_DASHBOARD_VIEW);
+      for (const leaf of dashboardLeaves) {
+        const view = leaf.view as LedgerDashboardView;
+        view.refresh();
+      }
+
       this.close();
     });
 
