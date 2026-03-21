@@ -87,6 +87,10 @@ npm run dev
 
 Built files go to `dist/`. The plugin entry point is `dist/main.js`.
 
+## Acknowledgments
+
+Inspired by [ledger-obsidian](https://github.com/tgrosinger/ledger-obsidian) by tgrosinger.
+
 ## License
 
 MIT
