@@ -1,8 +1,9 @@
 {
-	"id": "ledger-light",
-	"name": "Ledger Light",
-	"version": "0.2.1",
+	"id": "brat-test",
+	"name": "BRAT Test",
+	"version": "0.1.0",
 	"minAppVersion": "0.15.0",
-	"author": "okv",
-	"description": "Simple hledger integration for Obsidian - add transactions and view a basic dashboard"
+	"author": "test",
+	"description": "Minimal test plugin for BRAT",
+	"isDesktopOnly": false
 }
