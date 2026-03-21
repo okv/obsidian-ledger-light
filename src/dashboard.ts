@@ -24,12 +24,14 @@ interface MonthData {
 
 export class LedgerDashboardView extends ItemView {
   private transactions: ParsedTransaction[] = [];
-  private currentMonth: Date = new Date();
+  private currentMonth: Date;
   private selectedAccount: string = 'all';
   private accounts: string[] = [];
 
   constructor(leaf: WorkspaceLeaf, private app: App, private currency: string) {
     super(leaf);
+    const now = new Date();
+    this.currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   }
 
   getViewType(): string {
@@ -53,11 +55,6 @@ export class LedgerDashboardView extends ItemView {
       
       this.transactions = parseTransactions(content);
       this.accounts = [...new Set(this.transactions.flatMap(t => t.postings.map(p => p.account)))].sort();
-      
-      if (this.transactions.length > 0) {
-        const firstDate = new Date(this.transactions[0].date);
-        this.currentMonth = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
-      }
     } catch (error) {
       console.error('Failed to load journal:', error);
     }

@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { execSync } from 'child_process';
 
 const args = process.argv.slice(2);
 const shouldCommit = args.includes('--commit');
@@ -37,8 +38,6 @@ if (existsSync(versionsPath)) {
 }
 
 if (shouldCommit) {
-  const { execSync } = require('child_process');
-  
   execSync('git add manifest.json package.json versions.json', { stdio: 'inherit' });
   execSync(`git commit -m "release: v${newVersion}"`, { stdio: 'inherit' });
   execSync(`git tag v${newVersion}`, { stdio: 'inherit' });
