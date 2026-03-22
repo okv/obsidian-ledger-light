@@ -76,6 +76,8 @@ This plugin uses standard hledger/journal format. Accounts like `assets:cash`, `
 
 ## Development
 
+Requires **Node.js 22**.
+
 ```bash
 # Install dependencies
 npm install
