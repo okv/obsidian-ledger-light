@@ -25,6 +25,7 @@ hledger plugin for Obsidian. Parses hledger journal files directly (no hledger C
 - Delete transactions: comment out with `; ` prefix
 - After editing multiple source files: run `npm run build`
 - Tests: `npm test`
+- Type checking: run `npm run typecheck` before committing
 
 ## Release Workflow
 1. `npm run bump -- --commit` (bumps patch version + commits)
@@ -47,15 +48,18 @@ When making changes to the project, update the status in this file to reflect:
 - ✅ Auto-refresh dashboard after adding transaction
 
 ### Testing
-- ✅ Parser tests (23 tests passing)
+- ✅ Parser tests (31 tests passing)
 - ✅ Tests for `parseTransactionsWithLines` (6 tests)
 - ✅ Tests for `deleteTransaction` (4 tests)
 
+### TypeScript
+- ✅ TypeScript type checking in CI pipeline (`npm run typecheck`)
+
 ### Repository
-- ✅ GitHub Actions CI/CD
+- ✅ GitHub Actions CI/CD (Node.js 24 compatible)
 - ✅ BRAT-compatible releases
 - ✅ Version bump script
 - ✅ README documentation
 
 ### Version
-Current: 0.66.0
+Current: 0.77.2
