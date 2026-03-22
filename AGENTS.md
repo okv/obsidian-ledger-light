@@ -5,6 +5,7 @@ hledger plugin for Obsidian. Parses hledger journal files directly (no hledger C
 
 ## Tech Stack
 - **Vanilla TypeScript** with esbuild bundling (single `main.js`)
+- **TypeScript-only project** - all scripts use TypeScript with `node --experimental-strip-types`
 - **Vitest** for testing
 - **No framework dependencies** (vanilla Obsidian plugin API)
 
@@ -21,11 +22,12 @@ hledger plugin for Obsidian. Parses hledger journal files directly (no hledger C
 ## Conventions
 - Default currency: `€`
 - Default journal file: `transactions.ledger`
-- Auto-balance: write positive amount first, source account without amount
-- Delete transactions: comment out with `; ` prefix
+- Auto-balance: write positive amount first, second posting gets negative amount
+- Delete transactions: physically removes lines from file
 - After editing multiple source files: run `npm run build`
 - Tests: `npm test`
 - Type checking: run `npm run typecheck` before committing
+- Git hooks: automatically installed via `postinstall` script
 
 ## Release Workflow
 1. `npm run bump -- --commit` (bumps patch version + commits)
@@ -54,10 +56,12 @@ When making changes to the project, update the status in this file to reflect:
 
 ### TypeScript
 - ✅ TypeScript type checking in CI pipeline (`npm run typecheck`)
+- ✅ TypeScript-only scripts via `node --strip-types`
+- ✅ Git hooks auto-installed via postinstall
 
 ### Repository
 - ✅ GitHub Actions CI/CD (Node.js 24 compatible)
-- ✅ BRAT-compatible releases
+- ✅ Git pre-commit hook (tests + typecheck)
 - ✅ Version bump script
 - ✅ README documentation
 
