@@ -70,7 +70,7 @@ describe('deleteTransaction', () => {
     vault = app.vault;
   });
 
-  it('comments out transaction lines', async () => {
+  it('removes transaction lines', async () => {
     vault.files.set('test.ledger', `2024/01/15 Groceries
     expenses:food        €25.50
     assets:cash`);
@@ -78,12 +78,10 @@ describe('deleteTransaction', () => {
     await deleteTransaction(app as any, 'test.ledger', 0, 2);
 
     const content = vault.files.get('test.ledger');
-    expect(content).toBe(`; 2024/01/15 Groceries
-;     expenses:food        €25.50
-;     assets:cash`);
+    expect(content).toBe('');
   });
 
-  it('comments out only specified line range', async () => {
+  it('removes only specified line range', async () => {
     vault.files.set('test.ledger', `2024/01/15 Groceries
     expenses:food        €25.50
     assets:cash
@@ -92,29 +90,30 @@ describe('deleteTransaction', () => {
     assets:bank         €3000
     income:salary`);
 
-    await deleteTransaction(app as any, 'test.ledger', 0, 1);
+    await deleteTransaction(app as any, 'test.ledger', 0, 2);
 
     const content = vault.files.get('test.ledger');
-    expect(content).toBe(`; 2024/01/15 Groceries
-;     expenses:food        €25.50
-    assets:cash
-
-2024/01/20 Salary
+    expect(content).toBe(`2024/01/20 Salary
     assets:bank         €3000
     income:salary`);
   });
 
-  it('does not double-comment already commented lines', async () => {
-    vault.files.set('test.ledger', `; 2024/01/15 Groceries
+  it('cleans up blank lines after removal', async () => {
+    vault.files.set('test.ledger', `2024/01/15 Groceries
     expenses:food        €25.50
-    assets:cash`);
+    assets:cash
+
+
+2024/01/20 Salary
+    assets:bank         €3000
+    income:salary`);
 
     await deleteTransaction(app as any, 'test.ledger', 0, 2);
 
     const content = vault.files.get('test.ledger');
-    expect(content).toBe(`; 2024/01/15 Groceries
-;     expenses:food        €25.50
-;     assets:cash`);
+    expect(content).toBe(`2024/01/20 Salary
+    assets:bank         €3000
+    income:salary`);
   });
 
   it('handles non-existent file gracefully', async () => {

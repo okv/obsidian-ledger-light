@@ -71,9 +71,17 @@ export async function deleteTransaction(
     const content = await app.vault.read(file);
     const lines = content.split('\n');
     
-    for (let i = startLine; i <= endLine && i < lines.length; i++) {
-      if (!lines[i].trim().startsWith(';')) {
-        lines[i] = '; ' + lines[i];
+    lines.splice(startLine, endLine - startLine + 1);
+    
+    while (lines.length > 0 && lines[0].trim() === '') {
+      lines.shift();
+    }
+    let i = 0;
+    while (i < lines.length) {
+      if (lines[i].trim() === '' && (i === 0 || lines[i - 1].trim() === '')) {
+        lines.splice(i, 1);
+      } else {
+        i++;
       }
     }
     
