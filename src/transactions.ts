@@ -62,7 +62,7 @@ export class LedgerTransactionsView extends ItemView {
         const view = leaf.view as unknown as LedgerDashboardView;
         view.refresh();
       }
-      (this.app.workspace as typeof this.app.workspace & { closeLeaf: (leaf: WorkspaceLeaf) => void }).closeLeaf(this.leaf);
+      this.leaf.detach();
     });
   }
 
