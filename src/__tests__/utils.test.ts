@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { formatTransaction } from '../utils';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { formatTransaction, deleteTransaction } from '../utils';
+import { App, Vault } from './obsidian-mock';
 
 describe('formatTransaction', () => {
   it('formats a basic transaction', () => {
@@ -57,5 +58,66 @@ describe('formatTransaction', () => {
 
     const result = formatTransaction(entry);
     expect(result).toContain('€10.00');
+  });
+});
+
+describe('deleteTransaction', () => {
+  let app: App;
+  let vault: Vault;
+
+  beforeEach(() => {
+    app = new App();
+    vault = app.vault;
+  });
+
+  it('comments out transaction lines', async () => {
+    vault.files.set('test.ledger', `2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash`);
+
+    await deleteTransaction(app as any, 'test.ledger', 0, 2);
+
+    const content = vault.files.get('test.ledger');
+    expect(content).toBe(`; 2024/01/15 Groceries
+;     expenses:food        €25.50
+;     assets:cash`);
+  });
+
+  it('comments out only specified line range', async () => {
+    vault.files.set('test.ledger', `2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash
+
+2024/01/20 Salary
+    assets:bank         €3000
+    income:salary`);
+
+    await deleteTransaction(app as any, 'test.ledger', 0, 1);
+
+    const content = vault.files.get('test.ledger');
+    expect(content).toBe(`; 2024/01/15 Groceries
+;     expenses:food        €25.50
+    assets:cash
+
+2024/01/20 Salary
+    assets:bank         €3000
+    income:salary`);
+  });
+
+  it('does not double-comment already commented lines', async () => {
+    vault.files.set('test.ledger', `; 2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash`);
+
+    await deleteTransaction(app as any, 'test.ledger', 0, 2);
+
+    const content = vault.files.get('test.ledger');
+    expect(content).toBe(`; 2024/01/15 Groceries
+;     expenses:food        €25.50
+;     assets:cash`);
+  });
+
+  it('handles non-existent file gracefully', async () => {
+    await expect(deleteTransaction(app as any, 'nonexistent.ledger', 0, 2)).resolves.not.toThrow();
   });
 });

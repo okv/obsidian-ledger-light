@@ -47,9 +47,9 @@ When making changes to the project, update the status in this file to reflect:
 - ✅ Auto-refresh dashboard after adding transaction
 
 ### Testing
-- ✅ Parser tests (21 tests passing)
-- ❌ Tests for `parseTransactionsWithLines`
-- ❌ Tests for `deleteTransaction`
+- ✅ Parser tests (23 tests passing)
+- ✅ Tests for `parseTransactionsWithLines` (6 tests)
+- ✅ Tests for `deleteTransaction` (4 tests)
 
 ### Repository
 - ✅ GitHub Actions CI/CD

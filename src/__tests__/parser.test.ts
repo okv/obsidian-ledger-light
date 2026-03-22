@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseJournalFile, parseTransactions, isIncomeAccount, isExpenseAccount } from '../parser';
+import { parseJournalFile, parseTransactions, parseTransactionsWithLines, isIncomeAccount, isExpenseAccount } from '../parser';
 
 describe('parseJournalFile', () => {
   it('extracts accounts from posting lines', () => {
@@ -168,5 +168,68 @@ describe('parseTransactions', () => {
 `;
     const result = parseTransactions(content);
     expect(result[0].postings[0].amount).toBe(-25.50);
+  });
+});
+
+describe('parseTransactionsWithLines', () => {
+  it('parses a simple transaction with correct line numbers', () => {
+    const content = `2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash`;
+    const result = parseTransactionsWithLines(content);
+    expect(result.length).toBe(1);
+    expect(result[0].startLine).toBe(0);
+    expect(result[0].endLine).toBe(2);
+  });
+
+  it('tracks line numbers for multiple transactions', () => {
+    const content = `2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash
+
+2024/01/20 Salary
+    assets:bank         €3000
+    income:salary`;
+    const result = parseTransactionsWithLines(content);
+    expect(result.length).toBe(2);
+    expect(result[0].startLine).toBe(0);
+    expect(result[0].endLine).toBe(3);
+    expect(result[1].startLine).toBe(4);
+    expect(result[1].endLine).toBe(6);
+  });
+
+  it('skips comment lines in line number tracking', () => {
+    const content = `; comment line
+2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash`;
+    const result = parseTransactionsWithLines(content);
+    expect(result.length).toBe(1);
+    expect(result[0].startLine).toBe(1);
+    expect(result[0].endLine).toBe(3);
+  });
+
+  it('skips blank lines in line number tracking', () => {
+    const content = `
+
+2024/01/15 Groceries
+    expenses:food        €25.50
+    assets:cash`;
+    const result = parseTransactionsWithLines(content);
+    expect(result.length).toBe(1);
+    expect(result[0].startLine).toBe(2);
+  });
+
+  it('handles empty content', () => {
+    const result = parseTransactionsWithLines('');
+    expect(result.length).toBe(0);
+  });
+
+  it('handles content with only comments and blanks', () => {
+    const content = `; comment
+# another comment
+! price directive`;
+    const result = parseTransactionsWithLines(content);
+    expect(result.length).toBe(0);
   });
 });
