@@ -14,7 +14,7 @@ describe('formatTransaction', () => {
     };
 
     const result = formatTransaction(entry);
-    expect(result).toBe('2024/01/15 Groceries\n    expenses:food    €25.50\n    assets:cash');
+    expect(result).toBe('2024/01/15 Groceries\n    expenses:food    €25.50\n    assets:cash    -€25.50');
   });
 
   it('handles empty description', () => {

@@ -10,7 +10,7 @@ Simple hledger integration for Obsidian. Add transactions and view your finances
 
 - **Quick Transaction Entry** - Add expenses/income via a simple form with account dropdowns
 - **Auto-populated Accounts** - Account list is automatically read from your hledger journal file
-- **Balanced Entries** - Transactions are automatically balanced per double-entry bookkeeping
+- **Balanced Entries** - Transactions are automatically balanced; you only enter one amount, the second posting gets the opposite amount
 - **Dashboard** - Monthly income/expense summary with account filtering
 
 ## Installation
@@ -65,7 +65,7 @@ Create a `transactions.ledger` file in your vault root. Example:
 
 2024/01/15 Grocery shopping
     expenses:food        $25.50
-    assets:cash
+    assets:cash         -$25.50
 
 2024/01/20 Salary
     assets:bank         $3000

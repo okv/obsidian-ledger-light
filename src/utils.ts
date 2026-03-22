@@ -45,7 +45,7 @@ export function formatTransaction(entry: TransactionEntry): string {
   const desc = entry.description || 'Transaction';
   const amount = formatAmount(Math.abs(entry.amount), entry.currency);
 
-  return `${date} ${desc}\n    ${entry.toAccount}    ${amount}\n    ${entry.fromAccount}`;
+  return `${date} ${desc}\n    ${entry.toAccount}    ${amount}\n    ${entry.fromAccount}    -${amount}`;
 }
 
 function formatDate(dateStr: string): string {
