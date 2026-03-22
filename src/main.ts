@@ -42,6 +42,14 @@ export default class LedgerLightPlugin extends Plugin {
       callback: () => this.openTransactionsView()
     });
     this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this, this.settings.currency));
+    this.registerEvent(
+      this.app.workspace.on('file-open', (file) => {
+        if (file && file.path.endsWith('.ledger')) {
+          const leaf = this.app.workspace.getLeaf(false);
+          leaf.setViewState({ type: LEDGER_DASHBOARD_VIEW });
+        }
+      })
+    );
   }
 
   async loadSettings() {

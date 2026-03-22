@@ -30,6 +30,10 @@ Simple hledger integration for Obsidian. Add transactions and view your finances
 
 ## Usage
 
+### Opening Ledger Files
+
+Clicking any `.ledger` file in the file explorer will open the Ledger Dashboard, which reads from your configured journal file.
+
 ### Add Transaction
 
 1. Press `Ctrl+P` (or `Cmd+P` on Mac) to open the command palette
