@@ -41,8 +41,8 @@ export default class LedgerLightPlugin extends Plugin {
       name: 'Recent Transactions',
       callback: () => this.openTransactionsView()
     });
-    this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this.app, this, this.settings.currency));
-    this.registerView(LEDGER_TRANSACTIONS_VIEW, (leaf) => new LedgerTransactionsView(leaf, this.app, this));
+    this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this, this.settings.currency));
+    this.registerView(LEDGER_TRANSACTIONS_VIEW, (leaf) => new LedgerTransactionsView(leaf, this));
   }
 
   async loadSettings() {
@@ -61,19 +61,13 @@ export default class LedgerLightPlugin extends Plugin {
 
   async openDashboard() {
     const { workspace } = this.app;
-    let leaf: WorkspaceLeaf = workspace.getLeaf('tab');
-    if (!leaf) {
-      leaf = workspace.getLeaf(true);
-    }
+    let leaf: WorkspaceLeaf = workspace.getLeaf(true);
     await leaf.setViewState({ type: LEDGER_DASHBOARD_VIEW });
   }
 
   async openTransactionsView() {
     const { workspace } = this.app;
-    let leaf: WorkspaceLeaf = workspace.getLeaf('tab');
-    if (!leaf) {
-      leaf = workspace.getLeaf(true);
-    }
+    let leaf: WorkspaceLeaf = workspace.getLeaf(true);
     await leaf.setViewState({ type: LEDGER_TRANSACTIONS_VIEW });
   }
 }

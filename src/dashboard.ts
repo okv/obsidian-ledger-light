@@ -32,9 +32,13 @@ export class LedgerDashboardView extends ItemView {
   private currentMonth: Date;
   private selectedAccount: string = 'all';
   private accounts: string[] = [];
+  private plugin: LedgerLightPlugin;
+  private currency: string;
 
-  constructor(leaf: WorkspaceLeaf, private app: App, private plugin: LedgerLightPlugin, private currency: string) {
+  constructor(leaf: WorkspaceLeaf, plugin: LedgerLightPlugin, currency: string) {
     super(leaf);
+    this.plugin = plugin;
+    this.currency = currency;
     const now = new Date();
     this.currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   }
@@ -58,7 +62,8 @@ export class LedgerDashboardView extends ItemView {
 
   private async loadData(): Promise<void> {
     try {
-      const settings = this.app.plugins.getPlugin('ledger-light');
+      const app = this.app as App & { plugins: { getPlugin: (id: string) => { settings?: { journalPath: string } } | null } };
+      const settings = app.plugins.getPlugin('ledger-light');
       const journalPath = settings?.settings?.journalPath || 'transactions.ledger';
       const content = await readJournalFile(this.app, journalPath);
       

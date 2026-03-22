@@ -12,9 +12,11 @@ interface LedgerLightPlugin {
 export class LedgerTransactionsView extends ItemView {
   private transactions: ParsedTransactionWithLines[] = [];
   private currency: string = '€';
+  private plugin: LedgerLightPlugin;
 
-  constructor(leaf: WorkspaceLeaf, private app: App, private plugin: LedgerLightPlugin) {
+  constructor(leaf: WorkspaceLeaf, plugin: LedgerLightPlugin) {
     super(leaf);
+    this.plugin = plugin;
   }
 
   getViewType(): string {
@@ -32,7 +34,8 @@ export class LedgerTransactionsView extends ItemView {
 
   private async loadData(): Promise<void> {
     try {
-      const settings = this.app.plugins.getPlugin('ledger-light');
+      const app = this.app as App & { plugins: { getPlugin: (id: string) => { settings?: { currency: string } } | null } };
+      const settings = app.plugins.getPlugin('ledger-light');
       this.currency = settings?.settings?.currency || '€';
     } catch {
       this.currency = '€';
@@ -59,7 +62,7 @@ export class LedgerTransactionsView extends ItemView {
         const view = leaf.view as unknown as LedgerDashboardView;
         view.refresh();
       }
-      this.app.workspace.closeLeaf(this.leaf);
+      (this.app.workspace as typeof this.app.workspace & { closeLeaf: (leaf: WorkspaceLeaf) => void }).closeLeaf(this.leaf);
     });
   }
 
@@ -67,7 +70,8 @@ export class LedgerTransactionsView extends ItemView {
     const content = container.createDiv('transactions-content');
     
     try {
-      const settings = this.app.plugins.getPlugin('ledger-light');
+      const app = this.app as App & { plugins: { getPlugin: (id: string) => { settings?: { journalPath: string } } | null } };
+      const settings = app.plugins.getPlugin('ledger-light');
       const journalPath = settings?.settings?.journalPath || 'transactions.ledger';
       const fileContent = await readJournalFile(this.app, journalPath);
       this.transactions = parseTransactionsWithLines(fileContent);

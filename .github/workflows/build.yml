@@ -26,6 +26,9 @@ jobs:
       - name: Run tests
         run: npm run test:coverage
 
+      - name: Type check
+        run: npm run typecheck
+
   release:
     needs: test
     if: startsWith(github.ref, 'refs/tags/v')

@@ -8,6 +8,7 @@
     "test": "vitest run --reporter tree",
     "test:coverage": "vitest run --reporter tree --coverage",
     "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
     "bump": "node version-bump.mjs"
   },
   "dependencies": {
