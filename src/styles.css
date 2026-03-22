@@ -197,6 +197,9 @@
 .dashboard-footer {
   margin-top: 16px;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
 }
 
 .dashboard-footer button {
