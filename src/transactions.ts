@@ -1,5 +1,6 @@
 import { App, ItemView, WorkspaceLeaf } from 'obsidian';
 import { parseTransactionsWithLines, ParsedTransactionWithLines } from './parser';
+import { LedgerDashboardView, LEDGER_DASHBOARD_VIEW } from './dashboard';
 import { readJournalFile, deleteTransaction } from './utils';
 
 export const LEDGER_TRANSACTIONS_VIEW = 'ledger-transactions';
@@ -51,8 +52,13 @@ export class LedgerTransactionsView extends ItemView {
     const header = container.createDiv('transactions-header');
     header.createEl('h2', { text: 'Recent Transactions' });
     
-    const exitBtn = header.createEl('button', { text: 'Exit' });
-    exitBtn.addEventListener('click', () => {
+    const closeBtn = header.createEl('button', { text: 'Close' });
+    closeBtn.addEventListener('click', () => {
+      const dashboardLeaves = this.app.workspace.getLeavesOfType(LEDGER_DASHBOARD_VIEW);
+      for (const leaf of dashboardLeaves) {
+        const view = leaf.view as unknown as LedgerDashboardView;
+        view.refresh();
+      }
       this.app.workspace.closeLeaf(this.leaf);
     });
   }
