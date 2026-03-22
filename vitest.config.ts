@@ -8,4 +8,14 @@ export default defineConfig({
       obsidian: './src/__tests__/obsidian-mock.ts',
     },
   },
+  coverage: {
+    provider: 'v8',
+    thresholds: {
+      lines: 60,
+      functions: 60,
+      branches: 60,
+      statements: 60,
+      100: true,
+    },
+  },
 });
