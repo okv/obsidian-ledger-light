@@ -1,13 +1,15 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { execSync } from 'child_process';
+import { join } from 'path';
 
 const args = process.argv.slice(2);
 const shouldCommit = args.includes('--commit');
 const targetVersion = args.find(arg => !arg.startsWith('--'));
 
-const manifestPath = 'manifest.json';
-const versionsPath = 'versions.json';
-const packagePath = 'package.json';
+const rootDir = join(import.meta.dirname, '..');
+const manifestPath = join(rootDir, 'manifest.json');
+const versionsPath = join(rootDir, 'versions.json');
+const packagePath = join(rootDir, 'package.json');
 
 const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 let newVersion;

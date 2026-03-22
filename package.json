@@ -11,7 +11,7 @@
     "test:coverage": "vitest run --reporter tree --coverage",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "bump": "node version-bump.mjs"
+    "bump": "node --experimental-strip-types scripts/version-bump.ts"
   },
   "dependencies": {
     "obsidian": "^0.15.0"
