@@ -170,29 +170,31 @@ class AddTransactionModal extends Modal {
         return;
       }
 
-      const entry: TransactionEntry = {
-        date,
-        description: descInput.value,
-        fromAccount,
-        toAccount,
-        amount,
-        currency: this.plugin.settings.currency
-      };
+      try {
+        const entry: TransactionEntry = {
+          date,
+          description: descInput.value,
+          fromAccount,
+          toAccount,
+          amount,
+          currency: this.plugin.settings.currency
+        };
 
-      await ensureJournalFile(this.app, this.plugin.settings.journalPath);
-      await appendTransaction(
-        this.app,
-        this.plugin.settings.journalPath,
-        formatTransaction(entry)
-      );
+        await ensureJournalFile(this.app, this.plugin.settings.journalPath);
+        await appendTransaction(
+          this.app,
+          this.plugin.settings.journalPath,
+          formatTransaction(entry)
+        );
 
-      const dashboardLeaves = this.app.workspace.getLeavesOfType(LEDGER_DASHBOARD_VIEW);
-      for (const leaf of dashboardLeaves) {
-        const view = leaf.view as LedgerDashboardView;
-        view.refresh();
+        const dashboardLeaves = this.app.workspace.getLeavesOfType(LEDGER_DASHBOARD_VIEW);
+        for (const leaf of dashboardLeaves) {
+          const view = leaf.view as LedgerDashboardView;
+          view.refresh();
+        }
+      } finally {
+        this.close();
       }
-
-      this.close();
     });
 
     buttonRow.createEl('button', { text: 'Cancel' }).addEventListener('click', () => {
