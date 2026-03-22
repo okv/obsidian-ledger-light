@@ -138,6 +138,10 @@ export class LedgerDashboardView extends ItemView {
     recentBtn.addEventListener('click', () => {
       this.plugin.openTransactionsView();
     });
+    const refreshBtn = buttonDiv.createEl('button', { text: 'Refresh Dashboard' });
+    refreshBtn.addEventListener('click', () => {
+      this.refresh();
+    });
   }
 
   private renderSection(
