@@ -11,7 +11,11 @@ if (!fs.existsSync(hooksDir)) {
 }
 
 const hookContent = `#!/bin/sh
-npm test && npm run typecheck
+echo "*** Check types..." &&
+npm run typecheck &&
+
+echo "*** Run tests..." &&
+npm test
 `;
 
 fs.writeFileSync(preCommitPath, hookContent);
