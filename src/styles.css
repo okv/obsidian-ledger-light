@@ -1,4 +1,5 @@
-.ledger-light-modal .modal-content {
+.ledger-light-modal .modal-content,
+.ledger-transactions {
   padding: 20px;
 }
 
@@ -216,37 +217,15 @@
 }
 
 .ledger-transactions {
-  padding: 16px;
-  height: 100%;
-  overflow-y: auto;
+  padding: 20px;
 }
 
-.transactions-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.transactions-header h2 {
-  margin: 0;
+.ledger-transactions h2 {
+  margin: 0 0 20px 0;
   font-size: 18px;
   font-weight: 600;
-}
-
-.transactions-header button {
-  padding: 4px 12px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--background-secondary);
-  color: var(--text-normal);
-  cursor: pointer;
-}
-
-.transactions-header button:hover {
-  background: var(--background-modifier-hover);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 
 .transactions-list {

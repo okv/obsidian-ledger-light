@@ -8,7 +8,7 @@ import {
   TransactionEntry
 } from './utils';
 import { LedgerDashboardView, LEDGER_DASHBOARD_VIEW } from './dashboard';
-import { LedgerTransactionsView, LEDGER_TRANSACTIONS_VIEW } from './transactions';
+import { LedgerTransactionsModal } from './transactions';
 
 interface LedgerSettings {
   journalPath: string;
@@ -42,7 +42,6 @@ export default class LedgerLightPlugin extends Plugin {
       callback: () => this.openTransactionsView()
     });
     this.registerView(LEDGER_DASHBOARD_VIEW, (leaf) => new LedgerDashboardView(leaf, this, this.settings.currency));
-    this.registerView(LEDGER_TRANSACTIONS_VIEW, (leaf) => new LedgerTransactionsView(leaf, this));
   }
 
   async loadSettings() {
@@ -66,9 +65,7 @@ export default class LedgerLightPlugin extends Plugin {
   }
 
   async openTransactionsView() {
-    const { workspace } = this.app;
-    let leaf: WorkspaceLeaf = workspace.getLeaf(true);
-    await leaf.setViewState({ type: LEDGER_TRANSACTIONS_VIEW });
+    new LedgerTransactionsModal(this.app, this).open();
   }
 }
 

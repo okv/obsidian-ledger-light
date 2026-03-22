@@ -1,30 +1,20 @@
-import { App, ItemView, WorkspaceLeaf } from 'obsidian';
+import { App, Modal } from 'obsidian';
 import { parseTransactionsWithLines, ParsedTransactionWithLines } from './parser';
 import { LedgerDashboardView, LEDGER_DASHBOARD_VIEW } from './dashboard';
 import { readJournalFile, deleteTransaction } from './utils';
-
-export const LEDGER_TRANSACTIONS_VIEW = 'ledger-transactions';
 
 interface LedgerLightPlugin {
   openAddTransactionModal(): void;
 }
 
-export class LedgerTransactionsView extends ItemView {
+export class LedgerTransactionsModal extends Modal {
   private transactions: ParsedTransactionWithLines[] = [];
   private currency: string = '€';
   private plugin: LedgerLightPlugin;
 
-  constructor(leaf: WorkspaceLeaf, plugin: LedgerLightPlugin) {
-    super(leaf);
+  constructor(app: App, plugin: LedgerLightPlugin) {
+    super(app);
     this.plugin = plugin;
-  }
-
-  getViewType(): string {
-    return LEDGER_TRANSACTIONS_VIEW;
-  }
-
-  getDisplayText(): string {
-    return 'Recent Transactions';
   }
 
   async onOpen(): Promise<void> {
@@ -43,7 +33,7 @@ export class LedgerTransactionsView extends ItemView {
   }
 
   private render(): void {
-    const container = this.containerEl;
+    const container = this.contentEl;
     container.empty();
     container.addClass('ledger-transactions');
 
@@ -52,18 +42,7 @@ export class LedgerTransactionsView extends ItemView {
   }
 
   private renderHeader(container: HTMLElement): void {
-    const header = container.createDiv('transactions-header');
-    header.createEl('h2', { text: 'Recent Transactions' });
-    
-    const closeBtn = header.createEl('button', { text: 'Close' });
-    closeBtn.addEventListener('click', () => {
-      const dashboardLeaves = this.app.workspace.getLeavesOfType(LEDGER_DASHBOARD_VIEW);
-      for (const leaf of dashboardLeaves) {
-        const view = leaf.view as unknown as LedgerDashboardView;
-        view.refresh();
-      }
-      this.leaf.detach();
-    });
+    container.createEl('h2', { text: 'Recent Transactions' });
   }
 
   private async renderContent(container: HTMLElement): Promise<void> {

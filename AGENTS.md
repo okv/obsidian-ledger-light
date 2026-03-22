@@ -15,7 +15,7 @@ hledger plugin for Obsidian. Parses hledger journal files directly (no hledger C
 | `parser.ts` | Journal parsing, account extraction |
 | `utils.ts` | File I/O, transaction formatting, delete |
 | `dashboard.ts` | Monthly income/expenses summary view |
-| `transactions.ts` | Recent Transactions view (last 5, delete) |
+| `transactions.ts` | Recent Transactions modal (last 5, delete) |
 | `styles.css` | All UI styling |
 
 ## Conventions
@@ -44,7 +44,7 @@ When making changes to the project, update the status in this file to reflect:
 - ✅ Settings tab (journal path, currency)
 - ✅ Add Transaction modal with auto-populated account dropdowns
 - ✅ Dashboard view (monthly income/expenses summary)
-- ✅ Recent Transactions view (last 5 transactions with delete)
+- ✅ Recent Transactions modal (last 5 transactions with delete)
 - ✅ Auto-refresh dashboard after adding transaction
 
 ### Testing
